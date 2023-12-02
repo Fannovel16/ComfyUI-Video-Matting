@@ -10,6 +10,7 @@ if os.path.exists(config_path):
     config = yaml.load(open(config_path, "r"), Loader=yaml.FullLoader)
 else:
     raise Exception("config.yaml file is neccessary, plz recreate the config file by downloading it from https://github.com/Fannovel16/ComfyUI-Video-Matting")
+CKPTS_PATH = os.path.join(os.path.dirname(__file__), config["ckpts_path"])
 
 def auto_downsample_ratio(h, w):
     """
@@ -66,7 +67,7 @@ class RobustVideoMatting:
     CATEGORY = "Video Matting/Robust Video Matting"
 
     def matting(self, video_frames, backbone, fp16, batch_size):
-        model_path = load_file_from_url(download_url_template.format(backbone=backbone, dtype="fp16" if fp16 else "fp32"), model_dir=config["ckpts_path"])
+        model_path = load_file_from_url(download_url_template.format(backbone=backbone, dtype="fp16" if fp16 else "fp32"), model_dir=CKPTS_PATH)
         model = torch.jit.load(model_path, map_location="cpu")
         model.to(device)
         video_frames = rearrange(video_frames, "n h w c -> n c h w")
