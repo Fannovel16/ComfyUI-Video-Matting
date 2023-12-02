@@ -1,0 +1,2 @@
+# you can also use absolute paths like: "/root/ComfyUI/custom_nodes/ComfyUI-Video-Matting/ckpts" or "D:\\comfyui\\custom_nodes\\ComfyUI-Video-Matting\\ckpts"
+ckpts_path: "./ckpts"
