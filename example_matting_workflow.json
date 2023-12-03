@@ -1,225 +1,13 @@
 {
-  "last_node_id": 10,
-  "last_link_id": 14,
+  "last_node_id": 8,
+  "last_link_id": 9,
   "nodes": [
-    {
-      "id": 2,
-      "type": "Robust Video Matting",
-      "pos": [
-        253,
-        53
-      ],
-      "size": {
-        "0": 315,
-        "1": 126
-      },
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "video_frames",
-          "type": "IMAGE",
-          "link": 10
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            13
-          ],
-          "shape": 3,
-          "slot_index": 0
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": [
-            6
-          ],
-          "shape": 3,
-          "slot_index": 1
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "Robust Video Matting"
-      },
-      "widgets_values": [
-        "mobilenetv3",
-        true,
-        4
-      ]
-    },
-    {
-      "id": 5,
-      "type": "MaskToImage",
-      "pos": [
-        1036,
-        -167
-      ],
-      "size": {
-        "0": 210,
-        "1": 26
-      },
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "mask",
-          "type": "MASK",
-          "link": 6
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            12
-          ],
-          "shape": 3,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "MaskToImage"
-      }
-    },
-    {
-      "id": 8,
-      "type": "VHS_VideoCombine",
-      "pos": [
-        817,
-        -99
-      ],
-      "size": [
-        210,
-        436
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 13
-        }
-      ],
-      "outputs": [
-        {
-          "name": "GIF",
-          "type": "GIF",
-          "links": null,
-          "shape": 3
-        }
-      ],
-      "title": "Foreground",
-      "properties": {},
-      "widgets_values": [
-        10,
-        0,
-        "AnimateDiff",
-        "video/h264-mp4",
-        false,
-        true,
-        null,
-        "/view?filename=AnimateDiff_00091_.mp4&subfolder=&type=output&format=video%2Fh264-mp4"
-      ]
-    },
-    {
-      "id": 9,
-      "type": "VHS_VideoCombine",
-      "pos": [
-        1037,
-        -99
-      ],
-      "size": [
-        210,
-        436
-      ],
-      "flags": {},
-      "order": 6,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 12
-        }
-      ],
-      "outputs": [
-        {
-          "name": "GIF",
-          "type": "GIF",
-          "links": null,
-          "shape": 3
-        }
-      ],
-      "title": "Mask",
-      "properties": {},
-      "widgets_values": [
-        10,
-        0,
-        "AnimateDiff",
-        "video/h264-mp4",
-        false,
-        true,
-        null,
-        "/view?filename=AnimateDiff_00092_.mp4&subfolder=&type=output&format=video%2Fh264-mp4"
-      ]
-    },
-    {
-      "id": 10,
-      "type": "VHS_VideoCombine",
-      "pos": [
-        596,
-        -95
-      ],
-      "size": [
-        210,
-        436
-      ],
-      "flags": {},
-      "order": 3,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 14
-        }
-      ],
-      "outputs": [
-        {
-          "name": "GIF",
-          "type": "GIF",
-          "links": null,
-          "shape": 3
-        }
-      ],
-      "title": "Original",
-      "properties": {},
-      "widgets_values": [
-        10,
-        0,
-        "AnimateDiff",
-        "video/h264-mp4",
-        false,
-        true,
-        null,
-        "/view?filename=AnimateDiff_00090_.mp4&subfolder=&type=output&format=video%2Fh264-mp4"
-      ]
-    },
     {
       "id": 1,
       "type": "VHS_LoadVideo",
       "pos": [
-        -85,
-        -46
+        -4,
+        5
       ],
       "size": {
         "0": 315,
@@ -233,7 +21,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            9
+            3
           ],
           "shape": 3,
           "slot_index": 0
@@ -259,11 +47,11 @@
       ]
     },
     {
-      "id": 7,
+      "id": 4,
       "type": "ImageScaleBy",
       "pos": [
-        254,
-        -97
+        -9,
+        -142
       ],
       "size": {
         "0": 315,
@@ -276,7 +64,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 9
+          "link": 3
         }
       ],
       "outputs": [
@@ -284,8 +72,8 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            10,
-            14
+            4,
+            6
           ],
           "shape": 3,
           "slot_index": 0
@@ -298,54 +86,267 @@
         "nearest-exact",
         0.75
       ]
+    },
+    {
+      "id": 2,
+      "type": "Robust Video Matting",
+      "pos": [
+        346,
+        -141
+      ],
+      "size": {
+        "0": 315,
+        "1": 150
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_frames",
+          "type": "IMAGE",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            7
+          ],
+          "shape": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            8
+          ],
+          "shape": 3,
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "Robust Video Matting"
+      },
+      "widgets_values": [
+        "resnet50",
+        true,
+        "green",
+        4
+      ]
+    },
+    {
+      "id": 7,
+      "type": "MaskToImage",
+      "pos": [
+        777,
+        -9
+      ],
+      "size": {
+        "0": 210,
+        "1": 26
+      },
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            9
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MaskToImage"
+      }
+    },
+    {
+      "id": 6,
+      "type": "VHS_VideoCombine",
+      "pos": [
+        559,
+        62
+      ],
+      "size": [
+        210,
+        436
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "GIF",
+          "type": "GIF",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "title": "Foreground",
+      "properties": {},
+      "widgets_values": [
+        15,
+        0,
+        "RVM",
+        "video/h264-mp4",
+        false,
+        true,
+        null,
+        "/view?filename=RVM_00002_.mp4&subfolder=&type=output&format=video%2Fh264-mp4"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "VHS_VideoCombine",
+      "pos": [
+        778,
+        63
+      ],
+      "size": [
+        210,
+        436
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 9
+        }
+      ],
+      "outputs": [
+        {
+          "name": "GIF",
+          "type": "GIF",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "title": "Mask",
+      "properties": {},
+      "widgets_values": [
+        15,
+        0,
+        "RVM",
+        "video/h264-mp4",
+        false,
+        true,
+        null,
+        "/view?filename=RVM_00003_.mp4&subfolder=&type=output&format=video%2Fh264-mp4"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "VHS_VideoCombine",
+      "pos": [
+        340,
+        61
+      ],
+      "size": [
+        210,
+        436
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 6
+        }
+      ],
+      "outputs": [
+        {
+          "name": "GIF",
+          "type": "GIF",
+          "links": null,
+          "shape": 3
+        }
+      ],
+      "title": "Original",
+      "properties": {},
+      "widgets_values": [
+        15,
+        0,
+        "RVM",
+        "video/h264-mp4",
+        false,
+        true,
+        null,
+        "/view?filename=RVM_00001_.mp4&subfolder=&type=output&format=video%2Fh264-mp4"
+      ]
     }
   ],
   "links": [
     [
+      3,
+      1,
+      0,
+      4,
+      0,
+      "IMAGE"
+    ],
+    [
+      4,
+      4,
+      0,
+      2,
+      0,
+      "IMAGE"
+    ],
+    [
       6,
+      4,
+      0,
+      5,
+      0,
+      "IMAGE"
+    ],
+    [
+      7,
+      2,
+      0,
+      6,
+      0,
+      "IMAGE"
+    ],
+    [
+      8,
       2,
       1,
-      5,
+      7,
       0,
       "MASK"
     ],
     [
       9,
-      1,
-      0,
       7,
-      0,
-      "IMAGE"
-    ],
-    [
-      10,
-      7,
-      0,
-      2,
-      0,
-      "IMAGE"
-    ],
-    [
-      12,
-      5,
-      0,
-      9,
-      0,
-      "IMAGE"
-    ],
-    [
-      13,
-      2,
       0,
       8,
-      0,
-      "IMAGE"
-    ],
-    [
-      14,
-      7,
-      0,
-      10,
       0,
       "IMAGE"
     ]
