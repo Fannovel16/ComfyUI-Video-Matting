@@ -32,8 +32,7 @@ class RobustVideoMatting:
 
     def matting(self, video_frames, backbone, fp16, bg_color, batch_size):
         model_path = load_file_from_url(download_url_template.format(backbone=backbone, dtype="fp16" if fp16 else "fp32"), model_dir=CKPTS_PATH)
-        model = torch.jit.load(model_path, map_location="cpu")
-        model.to(device)
+        model = torch.jit.load(model_path, map_location=device)
         video_frames, orig_num_frames, bg_color = prepare_frames_color(video_frames, bg_color, batch_size)
         bg_color = bg_color.to(device)
         if fp16:
