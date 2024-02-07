@@ -47,6 +47,7 @@ class BriaaiRembg:
 
         video_frames, orig_num_frames, bg_color = prepare_frames_color(video_frames, bg_color, batch_size)
         bg_color = bg_color.to(device)
+        orig_frame_size = video_frame.shape[3:5]
         video_frames = F.interpolate(video_frames, size=model_input_size, mode='bilinear')
         if fp16:
             model.half()
@@ -62,7 +63,9 @@ class BriaaiRembg:
             fgr = input * mask + bg_color * (1 - mask) 
             fgrs.append(fgr)
             masks.append(mask.to(fgr.dtype))
-        fgrs = rearrange(torch.cat(fgrs, dim=0), "n c h w -> n h w c")[:orig_num_frames].float().cpu().detach()
-        masks = torch.cat(masks, dim=0)[:orig_num_frames].float().cpu().detach()
+        fgrs = F.interpolate(torch.cat(fgrs, dim=0), size=orig_frame_size).float().cpu().detach()
+        fgrs = rearrange(fgrs, "n c h w -> n h w c")[:orig_num_frames]
+        masks = F.interpolate(torch.cat(masks, dim=0), size=orig_frame_size).float().cpu().detach()
+        masks = masks[:orig_num_frames]
         soft_empty_cache()
         return (fgrs, masks)
