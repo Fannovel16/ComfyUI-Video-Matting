@@ -1,4 +1,4 @@
-A minimalistic implementation of [Robust Video Matting (RVM)](https://github.com/PeterL1n/RobustVideoMatting/) in ComfyUI
+A minimalistic implementation of [Robust Video Matting (RVM)](https://github.com/PeterL1n/RobustVideoMatting/) and in ComfyUI
 
 [Example workflow](./example_matting_workflow.json)
 
