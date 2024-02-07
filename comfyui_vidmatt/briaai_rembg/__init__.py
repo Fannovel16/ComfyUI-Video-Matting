@@ -47,7 +47,7 @@ class BriaaiRembg:
 
         video_frames, orig_num_frames, bg_color = prepare_frames_color(video_frames, bg_color, batch_size)
         bg_color = bg_color.to(device)
-        orig_frame_size = video_frame.shape[2:4]
+        orig_frame_size = video_frames.shape[2:4]
         video_frames = F.interpolate(video_frames, size=model_input_size, mode='bilinear')
         if fp16:
             model.half()
