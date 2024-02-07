@@ -42,11 +42,11 @@ class BriaaiRembg:
     def matting(self, video_frames, version, fp16, bg_color, batch_size):
         model_path = load_file_from_url(download_url, file_name=f"briaai_rmbg_{version}.pth", model_dir=CKPTS_PATH)
         model = BriaRMBG()
-        model.load_state_dict(torch.load(model_path, map_location=device))
+        model.load_state_dict(torch.load(model_path, map_location="cpu"))
         model.to(device).eval()
 
         video_frames, orig_num_frames, bg_color = prepare_frames_color(video_frames, bg_color, batch_size)
-        bg_color.to(device)
+        bg_color = bg_color.to(device)
         video_frames = F.interpolate(video_frames, size=model_input_size, mode='bilinear')
         if fp16:
             model.half()
@@ -60,9 +60,9 @@ class BriaaiRembg:
             mask = model(normalize(input,[0.5,0.5,0.5],[1.0,1.0,1.0]))[0][0]
             mask = (mask-mask.min())/(mask.max()-mask.min()) #This is sharp enough
             fgr = input * mask + bg_color * (1 - mask) 
-            fgrs.append(fgr.float())
-            masks.append(mask.float())
-        fgrs = rearrange(torch.cat(fgrs, dim=0), "n c h w -> n h w c")[:orig_num_frames].cpu().detach()
-        masks = torch.cat(masks, dim=0)[:orig_num_frames].cpu().detach()
+            fgrs.append(fgr)
+            masks.append(mask.to(fgr.dtype))
+        fgrs = rearrange(torch.cat(fgrs, dim=0), "n c h w -> n h w c")[:orig_num_frames].float().cpu().detach()
+        masks = torch.cat(masks, dim=0)[:orig_num_frames].float().cpu().detach()
         soft_empty_cache()
         return (fgrs, masks)

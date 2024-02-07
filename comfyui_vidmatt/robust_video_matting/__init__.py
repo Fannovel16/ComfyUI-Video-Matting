@@ -35,7 +35,7 @@ class RobustVideoMatting:
         model = torch.jit.load(model_path, map_location="cpu")
         model.to(device)
         video_frames, orig_num_frames, bg_color = prepare_frames_color(video_frames, bg_color, batch_size)
-        bg_color.to(device)
+        bg_color = bg_color.to(device)
         if fp16:
             model.half()
             bg_color.half()
@@ -48,9 +48,9 @@ class RobustVideoMatting:
             fgr, pha, *rec = model(input, *rec, auto_downsample_ratio(*video_frames.shape[2:]))
             mask = pha.gt(0) #Remove blur
             fgr = fgr * mask + bg_color * ~mask
-            fgrs.append(fgr.float())
-            masks.append(mask.float())
-        fgrs = rearrange(torch.cat(fgrs, dim=0), "n c h w -> n h w c")[:orig_num_frames].cpu().detach()
-        masks = torch.cat(masks, dim=0)[:orig_num_frames].cpu().detach()
+            fgrs.append(fgr)
+            masks.append(mask.to(fgr.dtype))
+        fgrs = rearrange(torch.cat(fgrs, dim=0), "n c h w -> n h w c")[:orig_num_frames].cpu().detach().float()
+        masks = torch.cat(masks, dim=0)[:orig_num_frames].cpu().detach().float()
         soft_empty_cache()
         return (fgrs, masks)
