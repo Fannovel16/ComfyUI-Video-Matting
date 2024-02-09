@@ -47,9 +47,10 @@ class RobustVideoMatting:
             fgr, pha, *rec = model(input, *rec, auto_downsample_ratio(*video_frames.shape[2:]))
             mask = pha.gt(0) #Remove blur
             fgr = fgr * mask + bg_color * ~mask
-            fgrs.append(fgr)
-            masks.append(mask.to(fgr.dtype))
-        fgrs = rearrange(torch.cat(fgrs, dim=0), "n c h w -> n h w c")[:orig_num_frames].cpu().detach().float()
+            fgrs.append(fgr.cpu())
+            masks.append(mask.cpu().to(fgr.dtype))
+            soft_empty_cache()
+        fgrs = rearrange(torch.cat(fgrs, dim=0), "n c h w -> n h w c")[:orig_num_frames].detach().float()
         masks = torch.cat(masks, dim=0)[:orig_num_frames].cpu().detach().float()
         soft_empty_cache()
         return (fgrs, masks)

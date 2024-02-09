@@ -61,11 +61,11 @@ class BriaaiRembg:
             mask = model(normalize(input,[0.5,0.5,0.5],[1.0,1.0,1.0]))[0][0]
             mask = (mask-mask.min())/(mask.max()-mask.min()) #This is sharp enough
             fgr = input * mask + bg_color * (1 - mask) 
-            fgrs.append(fgr)
-            masks.append(mask.to(fgr.dtype))
-        fgrs = F.interpolate(torch.cat(fgrs, dim=0), size=orig_frame_size).float().cpu().detach()
+            fgrs.append(fgr.cpu())
+            masks.append(mask.cpu().to(fgr.dtype))
+            soft_empty_cache()
+        fgrs = F.interpolate(torch.cat(fgrs, dim=0), size=orig_frame_size).float().detach()
         fgrs = rearrange(fgrs, "n c h w -> n h w c")[:orig_num_frames]
-        masks = F.interpolate(torch.cat(masks, dim=0), size=orig_frame_size).float().cpu().detach()
+        masks = F.interpolate(torch.cat(masks, dim=0), size=orig_frame_size).float().detach()
         masks = masks[:orig_num_frames]
-        soft_empty_cache()
         return (fgrs, masks)
