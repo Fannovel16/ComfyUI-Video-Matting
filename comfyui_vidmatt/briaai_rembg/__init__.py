@@ -30,8 +30,7 @@ class BriaaiRembg:
                 "version": (["v1.4"], {"default": "v1.4"}),
                 "fp16": ("BOOLEAN", {"default": True}),
                 "bg_color": ("STRING", {"default": "green"}),
-                "batch_size": ("INT", {"min": 1, "max": 64, "default": 4}),
-                "threshold": ("FLOAT", {"min": 0.1, "max": 1, "default": 0.1, "step": 0.01})
+                "batch_size": ("INT", {"min": 1, "max": 64, "default": 4})
             }
         }
     
@@ -40,7 +39,7 @@ class BriaaiRembg:
     CATEGORY = "Video Matting"
 
 
-    def matting(self, video_frames, version, fp16, bg_color, batch_size, threshold=0.1):
+    def matting(self, video_frames, version, fp16, bg_color, batch_size, **kwargs):
         model_path = load_file_from_url(download_url, file_name=f"briaai_rmbg_{version}.pth", model_dir=CKPTS_PATH)
         model = BriaRMBG()
         model.load_state_dict(torch.load(model_path, map_location="cpu"))
@@ -49,25 +48,28 @@ class BriaaiRembg:
         video_frames, orig_num_frames, bg_color = prepare_frames_color(video_frames, bg_color, batch_size)
         bg_color = bg_color.to(device)
         orig_frame_size = video_frames.shape[2:4]
-        video_frames = F.interpolate(video_frames, size=model_input_size, mode='bilinear')
         if fp16:
             model.half()
             bg_color.half()
         
         fgrs, masks = [], []
         for i in range(video_frames.shape[0] // batch_size):
-            input = video_frames[i*batch_size:(i+1)*batch_size].to(device)
+            batch_imgs = video_frames[i*batch_size:(i+1)*batch_size].to(device)
+            resized_input = batch_imgs
             if fp16:
-                input = input.half()
-            mask = model(normalize(input,[0.5,0.5,0.5],[1.0,1.0,1.0]))[0][0]
+                resized_input = resized_input.half()
+            resized_input = F.interpolate(resized_input, size=model_input_size, mode='bilinear')
+            resized_input = normalize(resized_input,[0.5,0.5,0.5],[1.0,1.0,1.0])
+
+            mask = model(resized_input)[0][0]
             mask = (mask-mask.min())/(mask.max()-mask.min())
-            mask = mask.gt(threshold) #Prevent image degradation
-            fgr = input * mask + bg_color * ~mask
+            mask = F.interpolate(mask, size=orig_frame_size)
+
+            fgr = batch_imgs * mask + bg_color * (1 - mask)
             fgrs.append(fgr.cpu())
             masks.append(mask.cpu().to(fgr.dtype))
             soft_empty_cache()
-        fgrs = F.interpolate(torch.cat(fgrs, dim=0), size=orig_frame_size).float().detach()
-        fgrs = rearrange(fgrs, "n c h w -> n h w c")[:orig_num_frames]
-        masks = F.interpolate(torch.cat(masks, dim=0), size=orig_frame_size).float().detach()
-        masks = masks[:orig_num_frames]
+        
+        fgrs = rearrange(torch.cat(fgrs), "n c h w -> n h w c")[:orig_num_frames].float().detach()
+        masks = torch.cat(masks)[:orig_num_frames].float().detach()
         return (fgrs, masks)
