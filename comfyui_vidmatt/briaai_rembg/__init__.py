@@ -30,7 +30,8 @@ class BriaaiRembg:
                 "version": (["v1.4"], {"default": "v1.4"}),
                 "fp16": ("BOOLEAN", {"default": True}),
                 "bg_color": ("STRING", {"default": "green"}),
-                "batch_size": ("INT", {"min": 1, "max": 64, "default": 4})
+                "batch_size": ("INT", {"min": 1, "max": 64, "default": 4}),
+                "threshold": ("FLOAT", {"min": 0.1, "max": 1, "default": 0.1, "step": 0.01})
             }
         }
     
@@ -39,7 +40,7 @@ class BriaaiRembg:
     CATEGORY = "Video Matting"
 
 
-    def matting(self, video_frames, version, fp16, bg_color, batch_size):
+    def matting(self, video_frames, version, fp16, bg_color, batch_size, threshold=0.1):
         model_path = load_file_from_url(download_url, file_name=f"briaai_rmbg_{version}.pth", model_dir=CKPTS_PATH)
         model = BriaRMBG()
         model.load_state_dict(torch.load(model_path, map_location="cpu"))
@@ -59,8 +60,9 @@ class BriaaiRembg:
             if fp16:
                 input = input.half()
             mask = model(normalize(input,[0.5,0.5,0.5],[1.0,1.0,1.0]))[0][0]
-            mask = (mask-mask.min())/(mask.max()-mask.min()) #This is sharp enough
-            fgr = input * mask + bg_color * (1 - mask) 
+            mask = (mask-mask.min())/(mask.max()-mask.min())
+            mask = mask.gt(threshold) #Prevent image degradation
+            fgr = input * mask + bg_color * ~mask
             fgrs.append(fgr.cpu())
             masks.append(mask.cpu().to(fgr.dtype))
             soft_empty_cache()
