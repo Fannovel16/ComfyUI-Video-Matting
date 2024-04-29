@@ -71,5 +71,5 @@ class BriaaiRembg:
             soft_empty_cache()
         
         fgrs = rearrange(torch.cat(fgrs), "n c h w -> n h w c")[:orig_num_frames].float().detach()
-        masks = torch.cat(masks)[:orig_num_frames].float().detach()
+        masks = torch.cat(masks)[:orig_num_frames].squeeze(1).float().detach()
         return (fgrs, masks)
