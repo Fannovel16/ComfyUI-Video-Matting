@@ -51,6 +51,6 @@ class RobustVideoMatting:
             masks.append(mask.cpu().to(fgr.dtype))
             soft_empty_cache()
         fgrs = rearrange(torch.cat(fgrs, dim=0), "n c h w -> n h w c")[:orig_num_frames].detach().float()
-        masks = torch.cat(masks, dim=0)[:orig_num_frames].detach().float()
+        masks = torch.cat(masks, dim=0).squeeze(1)[:orig_num_frames].detach().float()
         soft_empty_cache()
         return (fgrs, masks)
