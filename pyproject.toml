@@ -1,0 +1,15 @@
+[project]
+name = "comfyui-video-matting"
+description = ""
+version = "1.0.0"
+license = "LICENSE"
+dependencies = ["einops", "Pillow"]
+
+[project.urls]
+Repository = "https://github.com/Fannovel16/ComfyUI-Video-Matting"
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "ComfyUI-Video-Matting"
+Icon = ""
+Models = [{location = "/checkpoints/model.safetensor", model_url = "https://example.com/model.zip"}]
