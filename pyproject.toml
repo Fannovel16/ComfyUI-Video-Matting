@@ -9,6 +9,6 @@ dependencies = ["einops", "Pillow"]
 Repository = "https://github.com/Fannovel16/ComfyUI-Video-Matting"
 
 [tool.comfy]
-PublisherId = ""
+PublisherId = "fannovel16"
 DisplayName = "ComfyUI-Video-Matting"
 Icon = ""
