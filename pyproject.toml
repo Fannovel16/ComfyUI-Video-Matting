@@ -1,0 +1,14 @@
+[project]
+name = "comfyui-video-matting"
+description = "A minimalistic implementation of [a/Robust Video Matting (RVM)](https://github.com/PeterL1n/RobustVideoMatting/) in ComfyUI"
+version = "1.0.0"
+license = "LICENSE"
+dependencies = ["einops", "Pillow"]
+
+[project.urls]
+Repository = "https://github.com/Fannovel16/ComfyUI-Video-Matting"
+
+[tool.comfy]
+PublisherId = "fannovel16"
+DisplayName = "ComfyUI-Video-Matting"
+Icon = ""
